@@ -16,6 +16,7 @@ const schema = buildSchema(`
 
   type Mutation {
     addUser(name: String, email: String): User
+    removeUser(id: ID!): Boolean
   }
 `);
 
@@ -34,6 +35,14 @@ const rootValue = {
     const newUser = { id: (users.length + 1).toString(), name, email };
     users.push(newUser);
     return newUser;
+  },
+  removeUser: ({ id }) => {
+    const index = users.findIndex(user => user.id === id);
+    if (index !== -1) {
+      users.splice(index, 1);
+      return true;
+    }
+    return false;
   },
 };
 
